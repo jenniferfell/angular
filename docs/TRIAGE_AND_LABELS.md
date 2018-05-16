@@ -1,16 +1,19 @@
-# Triage Process and GitHub Labels for Angular
+# Triage process and GitHub labels for Angular
 
-This document describes how the Angular team uses labels and milestones to triage issues on github.
-The basic idea of the process is that caretaker only assigns a component (`comp: *`) label.
-The owner of the component is then responsible for the secondary / component-level triage.
+This document describes how the Angular team uses labels and milestones to triage issues on GitHub.
+
+Triage is performed in two stages:
+
+1. The caretaker assigns a component (`comp: *`) label, which indicates the general area mentioned in the issue.
+1. The owner of the component is then responsible for the secondary / component-level triage. The component owners assigns `type: *`, `frequency: *`, and `severity: *` labels as appropriate. 
 
 
-## Label Types
+## Label types
 
 ### Components
 
-The caretaker should be able to determine which component the issue belongs to.
-The components have a clear piece of source code associated with it within the `/packages/` folder of this repo.
+The caretaker should be able to determine the component to which the issue belongs. 
+Each component has a clear piece of source code associated with it within the `/packages/` folder of this repo.
 
 * `comp: docs-infra` - the angular.io application
 * `comp: animations`
@@ -36,18 +39,20 @@ The components have a clear piece of source code associated with it within the `
 * `comp: web-worker`
 * `comp: zones`
 
-There are few components which are cross-cutting.
-They don't have a clear location in the source tree.
-We will treat them as a component even thought no specific source tree is associated with them.
+Some issues address feature areas that potentially span multiple locations in the source tree. 
+We treat these areas as components even thought no specific source tree is associated with them.
 
 * `comp: build & ci` - build and CI infrastructure for the angular/angular repo
-* `comp: docs` - documentation, including API docs, guides, tutorial
+* `comp: docs` - documentation, including API docs, guides, tutorial, examples
+    * `comp: docs\api` - subcategory added for issues related to API docs
+    * `comp: examples` - subcategory added for issues with example apps
 * `comp: packaging` - packaging format of @angular/* npm packages
 * `comp: performance`
 * `comp: security`
 
-Sometimes, especially in the case of cross-cutting issues or PRs, these PRs or issues belong to multiple components.
-In these cases, all applicable component labels should be used to triage the issue or PR.
+Sometimes a PR or issue belongs to multiple components.
+In these cases, all applicable component labels should be used to triage the issue or PR. 
+For example an issue in the "Routing and Navigation"  documentation belongs to both `comp: docs` and `comp: router`.
 
 
 ### Type
@@ -56,11 +61,11 @@ What kind of problem is this?
 
 * `type: RFC / discussion / question`
 * `type: bug`
-* `type: docs`
 * `type: feature`
 * `type: performance`
 * `type: refactor`
 
+## Primary triage: Caretaker
 
 ## Caretaker Triage Process (Primary Triage)
 
@@ -69,14 +74,14 @@ Issues that haven't been triaged can be found by selecting the issues with no mi
 
 If it's obvious that the issue or PR is related to a release regression, the caretaker is also responsible for assigning the `severity(5): regression` label to make the issue or PR highly visible.
 
-The primary triage should be done on a daily basis so that the issues become available for secondary triage without much of delay.
+The primary triage should be done daily so that the issues become available for secondary triage without much delay.
 
-The reason why we limit the responsibility of the caretaker to this one label is that it is likely that without domain knowledge the caretaker could mislabel issues or lack knowledge of duplicate issues.
+We limit the responsibility of the caretaker to the `comp` label because additional triage often requires domain knowledge. 
 
 Once the primary triage is done, the ng-bot automatically adds the milestone `needsTriage`.
 
 
-## Component's owner Triage Process
+## Secondary triage: Component owner
 
 The component owner is responsible for assigning one of the labels from each of these categories to the issues that have the milestone `needsTriage`:
 
@@ -84,7 +89,7 @@ The component owner is responsible for assigning one of the labels from each of 
 - `frequency: *`
 - `severity: *`
 
-We've adopted the issue categorization based on [user pain](http://www.lostgarden.com/2008/05/improving-bug-triage-with-user-pain.html) used by AngularJS. In this system every issue is assigned frequency and severity based on which the total user pain score is calculated.
+We've adopted the issue categorization based on [user pain](http://www.lostgarden.com/2008/05/improving-bug-triage-with-user-pain.html) used by AngularJS. In this system every issue is assigned frequency and severity, which are then used to calculate the total user pain score.
 
 The issues with type `type: feature`, `type: refactor` and `type: RFC / Discussion / question` do not require a frequency and severity.
 
@@ -108,7 +113,7 @@ These criteria are then used to calculate a "user pain" score as follows:
 
 `pain = severity × frequency`
 
-This score can then be used to estimate the impact of the issue which helps with prioritization.
+This score can then be used to estimate the impact of the issue, which helps with prioritization.
 
 Once the component's owner triage is done, the ng-bot automatically changes the milestone from `needsTriage` to `Backlog`.
 
@@ -134,9 +139,9 @@ In addition, PRs can have the following states:
 * `PR state: blocked` - PR is blocked on an issue or other PR. Not ready for review or triage or merge.
 
 
-## PR Target
+## PR target
 
-In our git workflow, we merge changes either to the `master` branch, the active patch branch (e.g. `5.0.x`), or to both.
+In our git workflow, we merge changes either to the `master` branch, the active patch branch (e.g. `6.0.x`), or to both.
 
 The decision about the target must be done by the PR author and/or reviewer.
 This decision is then honored when the PR is being merged by the caretaker.
@@ -152,22 +157,22 @@ To communicate the target we use the following labels:
 If a PR is missing the `PR target: *` label, or if the label is set to "TBD" when the PR is sent to the caretaker, the caretaker should reject the PR and request the appropriate target label to be applied before the PR is merged.
 
 
-## PR Approvals
+## PR approvals
 
 Before a PR can be merged it must be approved by the appropriate reviewer(s).
 
 To ensure that the right people review each change, we configured [GitHub CODEOWNERS](https://help.github.com/articles/about-codeowners/) (via `.github/CODEOWNERS`) and require that each PR has at least one approval from the appropriate code owner.
 
 Note that approved state does not mean a PR is ready to be merged.
-For example, a reviewer might approve the PR but request a minor tweak that doesn't need further review, e.g., a rebase or small uncontroversial change.
+For example, a reviewer might approve the PR but request a minor tweak that doesn't need further review, such as a rebase or small uncontroversial change.
 Only the `PR action: merge` label means that the PR is ready for merging.
 
 
-## Special Labels
+## Special labels
 
-### `cla: yes`, `cla: no`
+* `cla: yes`, `cla: no`
 Managed by googlebot.
-Indicates whether a PR has a CLA on file for its author(s).
+Indicates whether or not Google has a Contributor License Agreement (CLA) on file for the PR's author(s).
 Only issues with `cla:yes` should be merged into master.
 
 ### `aio: preview`
