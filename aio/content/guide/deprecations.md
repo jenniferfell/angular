@@ -314,11 +314,11 @@ For more information see the [Router guide](guide/router#activated-route).
 ### Dependency on a reflect-metadata polyfill in JIT mode
 Angular applications, and specifically applications that relied on the JIT compiler, used to require a polyfill for the [reflect-metadata](https://github.com/rbuckton/reflect-metadata) APIs.
 
-The need for this polyfill was removed in Angular version 8.0 ([see #14473](https://github.com/angular/angular-cli/pull/14473)), rendering the presence of the poylfill in most Angular applications unnecessary. Because the polyfill can be depended on by 3rd-party libraries, instead of removing it from all Angular projects, we are deprecating the requirement for this polyfill as of version 8.0. This should give library authors and application developers sufficient time to evaluate if they need the polyfill, and perform any refactoring necessary to remove the dependency on it.
+The need for this polyfill was removed in Angular version 8.0 ([see #14473](https://github.com/angular/angular-cli/pull/14473)), rendering the presence of the polyfill in most Angular applications unnecessary. Because the polyfill can be depended on by 3rd-party libraries, instead of removing it from all Angular projects, we are deprecating the requirement for this polyfill as of version 8.0. This should give library authors and application developers sufficient time to evaluate if they need the polyfill, and perform any refactoring necessary to remove the dependency on it.
 
 In a typical Angular project, the polyfill is not used in production builds, so removing it should not impact production applications. The goal behind this removal is overall simplification of the build setup and decrease in the number of external dependencies.
 
-We expect to remove the polyfill from most if not all CLI projects via an `ng upgrade` migration from version 8 to 9.
+We expect to remove the polyfill from most, if not all, CLI projects via an `ng update` migration from version 8 to 9.
 
 {@a static-query-resolution}
 ### `@ViewChild()` / `@ContentChild()` static resolution as the default
@@ -360,7 +360,7 @@ However, in practice, Angular simply ignores two-way bindings to template variab
 {@a binding-to-innertext}
 ### Binding to `innerText` in `platform-server`
 
-[Domino](https://github.com/fgnass/domino), which is used in server-side rendering, doesn't support `innerText`, so in platform-server's "domino adapter", there was special code to fall back to `textContent` if you tried to bind to `innerText`.
+[Domino](https://github.com/fgnass/domino), which is used in server-side rendering, doesn't support `innerText`, so in platform-server's "domino adapter" there was special code to fall back to `textContent` if you tried to bind to `innerText`.
 
 These two properties have subtle differences, so switching to `textContent` under the hood can be surprising to users. For this reason, we are deprecating this behavior. Going forward, users should explicitly bind to `textContent` when using Domino.
 
